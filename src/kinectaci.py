@@ -137,7 +137,7 @@ class Keyboard(object):
 		
 		self.vmin = np.array([0,0,0])
 		self.vmax = np.array([1, KB_WIDTH_FAC, KB_HEIGHT_FAC])
-		
+		self.scale = 1.0
 		# Load previous transform from file (if exists)
 		try:
 			self.set_transform(np.load('keyboard_transform.npy'))
@@ -186,7 +186,7 @@ class Keyboard(object):
 	def nudge_roll(self, sign):
 		""" Rotate about local y axis. """
 		delta = np.eye(4)		
-		t = sign * 0.001
+		t = sign * self.scale * 0.001
 		c, s = np.cos(t), np.sin(t)
 		
 		Ry = np.array([[c, 0, -s], [0, 1, 0], [s, 0, c]])
@@ -197,7 +197,7 @@ class Keyboard(object):
 	def nudge_pitch(self, sign):
 		""" rotate about x axis """
 		delta = np.eye(4)		
-		t = sign * 0.01
+		t = sign * self.scale * 0.01
 		c, s = np.cos(t), np.sin(t)
 		
 		Rx = np.array([[1, 0, 0], [0, c, -s], [ 0, s, c]])
@@ -208,7 +208,7 @@ class Keyboard(object):
 	def nudge_pitch(self, sign):
 		""" rotate about x axis """
 		delta = np.eye(4)		
-		t = sign * 0.01
+		t = sign * self.scale * 0.01
 		c, s = np.cos(t), np.sin(t)
 		
 		Rz = np.array([[c, -s, 0], [s, c, 0], [ 0, 0, 1]])
@@ -220,14 +220,14 @@ class Keyboard(object):
 	def nudge_x(self, sign):
 		""" Move along the x axis"""
 		delta = np.zeros((4,4))
-		translation = self.transform[0:3, 0] * 0.001 * sign
+		translation = self.transform[0:3, 0] * self.scale * 0.001 * sign
 		delta[0:3, 3] = translation
 		self.set_transform(self.transform + delta)
 
 	def nudge_y(self, sign):
 		""" Move along the y axis"""
 		delta = np.zeros((4,4))
-		translation = self.transform[0:3,1] * 0.001 * sign
+		translation = self.transform[0:3,1] * self.scale * 0.001 * sign
 		delta[0:3, 3] = translation
 		self.set_transform(self.transform + delta)
 		
@@ -235,7 +235,7 @@ class Keyboard(object):
 	def nudge_z(self, sign):
 		""" Move along local z axis. """
 		delta = np.zeros((4,4))
-		translation = self.transform[0:3, 2] * 0.001 * sign
+		translation = self.transform[0:3, 2] * self.scale * 0.001 * sign
 		delta[0:3, 3] = translation
 		self.set_transform(self.transform + delta)
 		
@@ -361,7 +361,7 @@ class Viewer(PyQGLViewer.QGLViewer):
 			self.keyboard.nudge_pitch(-1)
 			self.updateGL()
 		elif event.key() == QtCore.Qt.Key_E:
-			self.keyboard.nudge_pitch(1)
+			self.keyboard.nudge_yaw(1)
 			self.updateGL()
 		elif event.key() == QtCore.Qt.Key_Q:
 			self.keyboard.nudge_pitch(-1)
@@ -378,15 +378,19 @@ class Viewer(PyQGLViewer.QGLViewer):
 		elif event.key() == QtCore.Qt.Key_S:
 			self.keyboard.nudge_y(-1)
 			self.updateGL()
-		elif event.key() == QtCore.Qt.Key_Plus:
+		elif event.key() == QtCore.Qt.Key_C:
 			# Rotate the keyboard
 			self.keyboard.nudge_roll(1)  
 			self.updateGL()
-		elif event.key() == QtCore.Qt.Key_Minus:	  
+		elif event.key() == QtCore.Qt.Key_X:	  
 			# Rotate the keyboard
 			self.keyboard.nudge_roll(-1)
 			self.updateGL()
-
+		elif event.key() == QtCore.Qt.Key_Plus:
+			self.keyboard.scale += 1
+		elif event.key() == QtCore.Qt.Key_Minus:
+			if self.keyboard.scale > 1.0 :
+				self.keyboard.scale -= 1
 		else:
 			PyQGLViewer.QGLViewer.keyPressEvent(self, event)
 	
