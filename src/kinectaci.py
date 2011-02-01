@@ -25,6 +25,7 @@ import time
 import fluidsynth
 import freenect
 from Onboard.Keyboard import Keyboard
+import typewriter
 
 # Play with these constants to change the system response
 
@@ -144,9 +145,10 @@ class Keyboard(object):
 		self.height_factor = height_factor
 		self.gap_factor = gap_factor
 		self.key_start = key_start
+		self.filename = filename
 		# Load previous transform from file (if exists)
 		try:
-			self.set_transform(np.load(filename))
+			self.set_transform(np.load(self.filename))
 			print('transform loaded from file')
 		except:
 			print('failed to load from file')
@@ -187,7 +189,7 @@ class Keyboard(object):
 		""" Update the internal transform, calculate inverse, and save it. """
 		self.transform = transform
 		self.inv_transform = np.linalg.inv(transform)
-		np.save('keyboard_transform', self.transform)
+		np.save(self.filename, self.transform)
 	
 	def nudge_roll(self, sign):
 		""" Rotate about local y axis. """
@@ -462,10 +464,11 @@ class Viewer(PyQGLViewer.QGLViewer):
 	
 if __name__ == '__main__':
 	app = QtGui.QApplication([])
-	typewritter = QtGui.QWidget()
-	typewritter.resize(400,300)
-	typewritter.setWindowTitle("KinetACI")
-	typewritter.show()
+	form_typewriter = QtGui.QWidget()
+	form_typewriter.setWindowTitle("KinetACI")
+	ui = typewriter.Ui_form_typewriter()
+	ui.setupUi(form_typewriter)
+	form_typewriter.show()
 	win = Viewer()
 	win.show()
 	app.exec_()
