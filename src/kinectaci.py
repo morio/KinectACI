@@ -24,6 +24,7 @@ import numpy as np
 import time
 import fluidsynth
 import freenect
+from Onboard.Keyboard import Keyboard
 
 # Play with these constants to change the system response
 
@@ -32,11 +33,11 @@ REPEAT_TIME = 0.1		  # Minimum time between the start of two notes
 SAMPLE_STRIDE = 2		  # Divide depth map resolution by this amount
 MIN_POINTS = 4			 # Minimum points in a key for it to be pressed
 
-KB_WIDTH_FAC = 0.1		 # Width of keyboard = Length * KB_WIDTH_FAC
-KB_HEIGHT_FAC = 0.01	   # Height of keyboard = Length * KB_HEIGHT_FAC
+KB_WIDTH_FAC = 1		 # Width of keyboard = Length * KB_WIDTH_FAC
+KB_HEIGHT_FAC = 1	   # Height of keyboard = Length * KB_HEIGHT_FAC
 KB_GAP_FAC = 0.01		  # Gap between keys = KB Length * KB_GAP_FAC
 
-KB_NUM_KEYS = 22		   # Only dealing with white keys for now
+KB_NUM_KEYS = 4		   # Only dealing with white keys for now
 KB_START_KEY = 0		   # 0 = C2, 1 = D2, etc... (whites only)
 
 # Precompute U, V coordinates (since they never change)
@@ -85,7 +86,7 @@ def depth_to_xyz(u, v, stride, depth):
 
 class Key(object):
 	""" Represents a key's state, position and colour. """
-	def __init__(self, note, vmin, vmax, colour=(1,1,1,0.5)):
+	def __init__(self, note, vmin, vmax, colour=(0,0,1,0.5)):
 		""" Create a key corresponding to a midi note. """
 		self.note = note		
 		self.vmin = np.array(vmin)
@@ -132,15 +133,20 @@ class Keyboard(object):
 	
 	"""
 	
-	def __init__(self):
+	def __init__(self, number_of_keys, width_factor, height_factor, gap_factor, key_start, filename):
 		""" Create the keyboard. """		
 		
 		self.vmin = np.array([0,0,0])
-		self.vmax = np.array([1, KB_WIDTH_FAC, KB_HEIGHT_FAC])
+		self.vmax = np.array([1, width_factor, height_factor])
 		self.scale = 1.0
+		self.number_of_keys = number_of_keys
+		self.width_factor = width_factor
+		self.height_factor = height_factor
+		self.gap_factor = gap_factor
+		self.key_start = key_start
 		# Load previous transform from file (if exists)
 		try:
-			self.set_transform(np.load('keyboard_transform.npy'))
+			self.set_transform(np.load(filename))
 			print('transform loaded from file')
 		except:
 			print('failed to load from file')
@@ -159,16 +165,16 @@ class Keyboard(object):
 								 black_basis + 72))
 								 
 		def make_white_key(number, note):
-			xmin = number * 1.0 / KB_NUM_KEYS + KB_GAP_FAC / 2
-			xmax = (number + 1) * 1.0 / KB_NUM_KEYS - KB_GAP_FAC / 2
+			xmin = number * 1.0 / self.number_of_keys + self.gap_factor / 2
+			xmax = (number + 1) * 1.0 / self.number_of_keys - self.gap_factor / 2
 			ymin = self.vmin[1] 
 			ymax = self.vmax[1]
 			zmin = self.vmin[2]
 			zmax = self.vmax[2]
 			return Key(note, [xmin, ymin, zmin], [xmax, ymax, zmax])
 			
-		whites = white_notes[KB_START_KEY:KB_START_KEY + KB_NUM_KEYS]
-		self.keys = map(make_white_key, range(0, KB_NUM_KEYS), whites)
+		whites = white_notes[self.key_start:self.key_start + self.number_of_keys]
+		self.keys = map(make_white_key, range(0, self.number_of_keys), whites)
 		
 		# Create the synthesiser - and pass it to Key class
 		self.synth = fluidsynth.Synth()
@@ -205,7 +211,7 @@ class Keyboard(object):
 		
 		new_t = np.dot(self.transform, delta)
 		self.set_transform(new_t)
-	def nudge_pitch(self, sign):
+	def nudge_yaw(self, sign):
 		""" rotate about x axis """
 		delta = np.eye(4)		
 		t = sign * self.scale * 0.01
@@ -261,7 +267,7 @@ class Keyboard(object):
 		
 		ogl.glPushMatrix()
 		ogl.glMultMatrixf(self.transform.T)
-		   
+		
 		# Draw notes
 		for k in self.keys:
 			if k.pressed:
@@ -280,6 +286,7 @@ class Viewer(PyQGLViewer.QGLViewer):
 	def __init__(self):
 		PyQGLViewer.QGLViewer.__init__(self)		
 		self.points = np.zeros((3,1))
+		
 	
 	def init(self):
 		""" For initialisation once OpenGL context is created. """
@@ -317,7 +324,11 @@ class Viewer(PyQGLViewer.QGLViewer):
 		self.tilt = 0; 
 		self.kb_corners = np.zeros((3,3))
 		self.kb_corner_index = 0				
-		self.keyboard = Keyboard()
+		self.keyboards = [Keyboard(4, 1, 1, 0.001, 0,"keyboard1.npy"), \
+						Keyboard(4, 1, 1, 0.001, -8, "keyboard2.npy"), \
+						Keyboard(1, 2, 2, 0.01, -16, "keyboard3.npy")]
+		self.num_keyboard = 3
+		self.keyboard = self.keyboards[0]
 		
 	def animate(self):
 		""" Get the latest data from the kinect, and update the state. """
@@ -327,24 +338,26 @@ class Viewer(PyQGLViewer.QGLViewer):
 
 		xyz = depth_to_xyz(U, V, SAMPLE_STRIDE, np.array(depth))
 		self.points = xyz
-		self.keyboard.update(self.points)
+		for board in self.keyboards :
+			board.update(self.points)
 	
 	def draw(self):
 		""" Draw the point cloud and keyboard. """ 
 		ogl.glColor4f(0.6,0.6,0.6,1)
 		ogl.glVertexPointer(3, ogl.GL_FLOAT, 0, self.points.T)
 		ogl.glDrawArrays(ogl.GL_POINTS, 0, self.points.shape[1])
-		self.keyboard.draw()
-				
+		for board in self.keyboards :
+			board.draw()
+	
 	def keyPressEvent(self, event):
 		""" Handle keyboard events. """		
-		if event.key() == QtCore.Qt.Key_1:
+		if event.key() == QtCore.Qt.Key_F1:
 			self.kb_corner_index = 0
 			self.displayMessage('shift + click to set {0} corner'.format(self.kbt[0]))
-		elif event.key() == QtCore.Qt.Key_2:
+		elif event.key() == QtCore.Qt.Key_F2:
 			self.kb_corner_index = 1
 			self.displayMessage('shift + click to set {0} corner'.format(self.kbt[1]))
-		elif event.key() == QtCore.Qt.Key_3:
+		elif event.key() == QtCore.Qt.Key_F3:
 			self.kb_corner_index = 2
 			self.displayMessage('shift + click to set {0} corner'.format(self.kbt[2]))
 		elif event.key() == QtCore.Qt.Key_Z:
@@ -364,7 +377,7 @@ class Viewer(PyQGLViewer.QGLViewer):
 			self.keyboard.nudge_yaw(1)
 			self.updateGL()
 		elif event.key() == QtCore.Qt.Key_Q:
-			self.keyboard.nudge_pitch(-1)
+			self.keyboard.nudge_yaw(-1)
 			self.updateGL()
 		elif event.key() == QtCore.Qt.Key_A:
 			self.keyboard.nudge_x(-1)
@@ -388,9 +401,20 @@ class Viewer(PyQGLViewer.QGLViewer):
 			self.updateGL()
 		elif event.key() == QtCore.Qt.Key_Plus:
 			self.keyboard.scale += 1
+			self.displayMessage("Transform scale is set to {0}".format(self.keyboard.scale))
 		elif event.key() == QtCore.Qt.Key_Minus:
 			if self.keyboard.scale > 1.0 :
 				self.keyboard.scale -= 1
+				self.displayMessage("Transform scale is set to {0}".format(self.keyboard.scale))
+		elif event.key() == QtCore.Qt.Key_1:
+			self.keyboard = self.keyboards[0]
+			self.displayMessage("Seleccted first keyboard")
+		elif event.key() == QtCore.Qt.Key_2:
+			self.keyboard = self.keyboards[1]
+			self.displayMessage("Selected second keyboard")
+		elif event.key() == QtCore.Qt.Key_3:
+			self.keyboard = self.keyboards[2]
+			self.displayMessage("Selected third keyboard")
 		else:
 			PyQGLViewer.QGLViewer.keyPressEvent(self, event)
 	
@@ -438,10 +462,10 @@ class Viewer(PyQGLViewer.QGLViewer):
 	
 if __name__ == '__main__':
 	app = QtGui.QApplication([])
-	widget = QtGui.QWidget()
-	widget.resize(400,300)
-	widget.setWindowTitle("KinetACI")
-	widget.show()
+	typewritter = QtGui.QWidget()
+	typewritter.resize(400,300)
+	typewritter.setWindowTitle("KinetACI")
+	typewritter.show()
 	win = Viewer()
 	win.show()
 	app.exec_()
