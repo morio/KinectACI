@@ -36,6 +36,9 @@
    <property name="text">
     <string>A</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_B">
    <property name="geometry">
@@ -53,6 +56,9 @@
    </property>
    <property name="text">
     <string>B</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_C">
@@ -72,6 +78,9 @@
    <property name="text">
     <string>C</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_D">
    <property name="geometry">
@@ -89,6 +98,9 @@
    </property>
    <property name="text">
     <string>D</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_E">
@@ -108,6 +120,9 @@
    <property name="text">
     <string>E</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_F">
    <property name="geometry">
@@ -125,6 +140,9 @@
    </property>
    <property name="text">
     <string>F</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_G">
@@ -144,6 +162,9 @@
    <property name="text">
     <string>G</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_H">
    <property name="geometry">
@@ -161,6 +182,9 @@
    </property>
    <property name="text">
     <string>H</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_I">
@@ -180,6 +204,9 @@
    <property name="text">
     <string>I</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_J">
    <property name="geometry">
@@ -197,6 +224,9 @@
    </property>
    <property name="text">
     <string>J</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_L">
@@ -216,6 +246,9 @@
    <property name="text">
     <string>L</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_S">
    <property name="geometry">
@@ -233,6 +266,9 @@
    </property>
    <property name="text">
     <string>S</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_M">
@@ -252,6 +288,9 @@
    <property name="text">
     <string>M</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_P">
    <property name="geometry">
@@ -269,6 +308,9 @@
    </property>
    <property name="text">
     <string>P</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_K">
@@ -288,6 +330,9 @@
    <property name="text">
     <string>K</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_O">
    <property name="geometry">
@@ -305,6 +350,9 @@
    </property>
    <property name="text">
     <string>O</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_Q">
@@ -324,6 +372,9 @@
    <property name="text">
     <string>Q</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_T">
    <property name="geometry">
@@ -341,6 +392,9 @@
    </property>
    <property name="text">
     <string>T</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_R">
@@ -360,6 +414,9 @@
    <property name="text">
     <string>R</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_N">
    <property name="geometry">
@@ -377,6 +434,9 @@
    </property>
    <property name="text">
     <string>N</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_V">
@@ -396,6 +456,9 @@
    <property name="text">
     <string>V</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_QuestionMark">
    <property name="geometry">
@@ -413,6 +476,9 @@
    </property>
    <property name="text">
     <string>?</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_W">
@@ -432,6 +498,9 @@
    <property name="text">
     <string>W</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_Z">
    <property name="geometry">
@@ -449,6 +518,9 @@
    </property>
    <property name="text">
     <string>Z</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_U">
@@ -468,6 +540,9 @@
    <property name="text">
     <string>U</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_Y">
    <property name="geometry">
@@ -485,6 +560,9 @@
    </property>
    <property name="text">
     <string>Y</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_Comma">
@@ -504,6 +582,9 @@
    <property name="text">
     <string>,</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_Exclamation">
    <property name="geometry">
@@ -521,6 +602,9 @@
    </property>
    <property name="text">
     <string>!</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_X">
@@ -540,6 +624,9 @@
    <property name="text">
     <string>X</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_Space1">
    <property name="geometry">
@@ -557,6 +644,9 @@
    </property>
    <property name="text">
     <string>Space</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_Space2">
@@ -576,6 +666,9 @@
    <property name="text">
     <string>Space</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_Space3">
    <property name="geometry">
@@ -593,6 +686,9 @@
    </property>
    <property name="text">
     <string>Space</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPlainTextEdit" name="plainTextEdit">
@@ -636,6 +732,9 @@
    <property name="text">
     <string>.</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_Period2">
    <property name="geometry">
@@ -653,6 +752,9 @@
    </property>
    <property name="text">
     <string>.</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_Period3">
@@ -672,6 +774,9 @@
    <property name="text">
     <string>.</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_Enter">
    <property name="geometry">
@@ -689,6 +794,9 @@
    </property>
    <property name="text">
     <string>Enter</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_Backspace2">
@@ -708,6 +816,9 @@
    <property name="text">
     <string>BkSpc</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_Clear">
    <property name="geometry">
@@ -726,6 +837,9 @@
    <property name="text">
     <string>Clear</string>
    </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_Backspace1">
    <property name="geometry">
@@ -743,6 +857,9 @@
    </property>
    <property name="text">
     <string>BkSpc</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>
