@@ -72,7 +72,6 @@ class Keyboard(QtCore.QObject):
 		self.transform = transform
 		self.inv_transform = np.linalg.inv(transform)
 		np.save(self.filename, self.transform)
-	
 	def nudge_roll(self, sign):
 		""" Rotate about local y axis. """
 		delta = np.eye(4)		
