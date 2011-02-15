@@ -1,5 +1,4 @@
-from PyQt4 import QtCore, QtGui
-from PyQt4.QtCore import pyqtSignal
+from PyQt4 import QtCore
 import numpy as np
 from key import Key
 import fluidsynth
@@ -15,6 +14,8 @@ class Keyboard(QtCore.QObject):
 	TYPE_REVERSE = 2
 	TYPE_SELECT = 3
 	TYPE_DIRECTION_TOGGLE = 4
+	SCALE_UNIT_UP = 1.125
+	SCALE_UNIT_DOWN = 0.875
 	def __init__(self, type, number_of_keys, width_factor, height_factor, gap_factor, key_start, filename, connector):
 		""" Create the keyboard. """		
 		self.vmin = np.array([0,0,0])
@@ -28,6 +29,7 @@ class Keyboard(QtCore.QObject):
 		self.filename = filename
 		self.type = type
 		self.connector = connector
+		self.x_scale = 1
 		# Load previous transform from file (if exists)
 		try:
 			self.set_transform(np.load(self.filename))
@@ -104,6 +106,31 @@ class Keyboard(QtCore.QObject):
 		
 		new_t = np.dot(self.transform, delta)
 		self.set_transform(new_t)
+	def scale_x(self, sign):
+		if sign > 0 :
+			scale = self.SCALE_UNIT_UP
+		else :
+			scale = self.SCALE_UNIT_DOWN
+		Sx = np.array([[scale, 0, 0], [0,1,0],[0,0,1]])
+		self.transform[0:3,0:3] = np.dot(Sx, self.transform[0:3, 0:3]) 
+		self.set_transform(self.transform)
+	def scale_y(self, sign):
+		if sign > 0 :
+			scale = self.SCALE_UNIT_UP
+		else :
+			scale = self.SCALE_UNIT_DOWN
+		Sy = np.array([[1, 0, 0], [0,scale,0],[0,0,1]])
+		self.transform[0:3,0:3] = np.dot(Sy, self.transform[0:3, 0:3]) 
+		self.set_transform(self.transform)
+
+	def scale_z(self, sign):
+		if sign > 0 :
+			scale = self.SCALE_UNIT_UP
+		else :
+			scale = self.SCALE_UNIT_DOWN
+		Sz = np.array([[1, 0, 0], [0,1,0],[0,0,scale]])
+		self.transform[0:3,0:3] = np.dot(Sz, self.transform[0:3, 0:3]) 
+		self.set_transform(self.transform)
 
 	def nudge_x(self, sign):
 		""" Move along the x axis"""

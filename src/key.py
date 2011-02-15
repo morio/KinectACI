@@ -1,11 +1,8 @@
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtCore
 from PyQt4.QtCore import pyqtSignal
-import PyQGLViewer
-import OpenGL.GL as ogl
 import numpy as np
 import time
-import fluidsynth
-import freenect
+
 #from keyboard import Keyboard
 PLAY_TIME = 0.1			# Minimum time a note will sound for
 REPEAT_TIME = 0.1		  # Minimum time between the start of two notes
